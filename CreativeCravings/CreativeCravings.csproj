@@ -46,16 +46,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -65,6 +77,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -197,24 +215,78 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IngredientsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
+    <Compile Include="DAL\RecipeConfigurations.cs" />
     <Compile Include="DAL\RecipeContext.cs" />
     <Compile Include="DAL\RecipeInitializer.cs" />
+    <Compile Include="DAL\RecipeInterceptorLogging.cs" />
+    <Compile Include="DAL\RecipeInterceptorTransientErrors.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Migrations\201801272057254_InitialCreate.cs" />
+    <Compile Include="Migrations\201801272057254_InitialCreate.Designer.cs">
+      <DependentUpon>201801272057254_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801280234532_AddedDescToRecipes.cs" />
+    <Compile Include="Migrations\201801280234532_AddedDescToRecipes.Designer.cs">
+      <DependentUpon>201801280234532_AddedDescToRecipes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132049044_AddModelValidations.cs" />
+    <Compile Include="Migrations\201802132049044_AddModelValidations.Designer.cs">
+      <DependentUpon>201802132049044_AddModelValidations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132133039_addRequirementToRecipeName.cs" />
+    <Compile Include="Migrations\201802132133039_addRequirementToRecipeName.Designer.cs">
+      <DependentUpon>201802132133039_addRequirementToRecipeName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132146566_addRequirementToStringNames.cs" />
+    <Compile Include="Migrations\201802132146566_addRequirementToStringNames.Designer.cs">
+      <DependentUpon>201802132146566_addRequirementToStringNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132226333_setRecipeXrefCompositeKey.cs" />
+    <Compile Include="Migrations\201802132226333_setRecipeXrefCompositeKey.Designer.cs">
+      <DependentUpon>201802132226333_setRecipeXrefCompositeKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802170344173_addedUserRoles.cs" />
+    <Compile Include="Migrations\201802170344173_addedUserRoles.Designer.cs">
+      <DependentUpon>201802170344173_addedUserRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802170710035_changedRecipeChefIdToString.cs" />
+    <Compile Include="Migrations\201802170710035_changedRecipeChefIdToString.Designer.cs">
+      <DependentUpon>201802170710035_changedRecipeChefIdToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802172156306_addPostModel.cs" />
+    <Compile Include="Migrations\201802172156306_addPostModel.Designer.cs">
+      <DependentUpon>201802172156306_addPostModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802180020366_addedUsersToPosts.cs" />
+    <Compile Include="Migrations\201802180020366_addedUsersToPosts.Designer.cs">
+      <DependentUpon>201802180020366_addedUsersToPosts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EFPostRepository.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Ingredient.cs" />
+    <Compile Include="Models\IPostRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\RecipeIngredientXref.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AssignedIngredientData.cs" />
     <Compile Include="ViewModels\RecipeCategoryGroup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
@@ -231,6 +303,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -277,6 +351,17 @@
     <Content Include="Views\Recipes\Details.cshtml" />
     <Content Include="Views\Recipes\Edit.cshtml" />
     <Content Include="Views\Recipes\Index.cshtml" />
+    <Content Include="Views\Ingredients\Create.cshtml" />
+    <Content Include="Views\Ingredients\Delete.cshtml" />
+    <Content Include="Views\Ingredients\Details.cshtml" />
+    <Content Include="Views\Ingredients\Edit.cshtml" />
+    <Content Include="Views\Ingredients\Index.cshtml" />
+    <Content Include="Views\Posts\Create.cshtml" />
+    <Content Include="Views\Posts\Delete.cshtml" />
+    <Content Include="Views\Posts\Details.cshtml" />
+    <Content Include="Views\Posts\Edit.cshtml" />
+    <Content Include="Views\Posts\Index.cshtml" />
+    <Content Include="Views\Home\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -293,6 +378,38 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801272057254_InitialCreate.resx">
+      <DependentUpon>201801272057254_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801280234532_AddedDescToRecipes.resx">
+      <DependentUpon>201801280234532_AddedDescToRecipes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132049044_AddModelValidations.resx">
+      <DependentUpon>201802132049044_AddModelValidations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132133039_addRequirementToRecipeName.resx">
+      <DependentUpon>201802132133039_addRequirementToRecipeName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132146566_addRequirementToStringNames.resx">
+      <DependentUpon>201802132146566_addRequirementToStringNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132226333_setRecipeXrefCompositeKey.resx">
+      <DependentUpon>201802132226333_setRecipeXrefCompositeKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802170344173_addedUserRoles.resx">
+      <DependentUpon>201802170344173_addedUserRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802170710035_changedRecipeChefIdToString.resx">
+      <DependentUpon>201802170710035_changedRecipeChefIdToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802172156306_addPostModel.resx">
+      <DependentUpon>201802172156306_addPostModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802180020366_addedUsersToPosts.resx">
+      <DependentUpon>201802180020366_addedUsersToPosts.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
